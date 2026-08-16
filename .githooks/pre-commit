@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+unformatted="$(gofmt -l .)"
+
+if [ -n "$unformatted" ]; then
+	echo "formatting failed"
+	echo "$unformatted"
+	exit 1
+fi
+
+go vet ./...
+go test ./...
+
+if ! git diff --quiet -- '*.go' go.sum go.mod; then
+	echo "uncommited go files"
+	exit 1
+fi
