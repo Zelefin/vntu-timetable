@@ -1,6 +1,11 @@
 #!/bin/sh
 set -eu
 
+if ! git diff --quiet -- '*.go' go.sum go.mod; then
+	echo "Go files have unstage changes"
+	exit 1
+fi
+
 unformatted="$(gofmt -l .)"
 
 if [ -n "$unformatted" ]; then
@@ -11,8 +16,3 @@ fi
 
 go vet ./...
 go test ./...
-
-if ! git diff --quiet -- '*.go' go.sum go.mod; then
-	echo "uncommited go files"
-	exit 1
-fi
