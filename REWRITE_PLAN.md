@@ -801,6 +801,8 @@ Each phase ends with passing tests and a reviewable result. Avoid a long-lived b
 
 Gate: a trivial Linux `amd64` binary builds in CI, and external behavior fixtures exist.
 
+Decision: SQLite driver: github.com/ncruces/go-sqlite3, selected for its CGO-free database/sql implementation and online backup support. Its higher per-connection memory usage is mitigated with a small connection pool.
+
 ### Phase 1: database, migrations, and core schedule model
 
 - Implement configuration validation.

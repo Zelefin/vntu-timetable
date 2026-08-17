@@ -1,0 +1,79 @@
+{
+  "cached": false,
+  "data": {
+    "firstWeek": [
+      {
+        "day": "Пн",
+        "date": "17.08",
+        "lessons": []
+      },
+      {
+        "day": "Вт",
+        "date": "18.08",
+        "lessons": []
+      },
+      {
+        "day": "Ср",
+        "date": "19.08",
+        "lessons": []
+      },
+      {
+        "day": "Чт",
+        "date": "20.08",
+        "lessons": []
+      },
+      {
+        "day": "Пт",
+        "date": "21.08",
+        "lessons": []
+      },
+      {
+        "day": "Сб",
+        "date": "22.08",
+        "lessons": []
+      },
+      {
+        "day": "Нд",
+        "date": "23.08",
+        "lessons": []
+      }
+    ],
+    "secondWeek": [
+      {
+        "day": "Пн",
+        "date": "24.08",
+        "lessons": []
+      },
+      {
+        "day": "Вт",
+        "date": "25.08",
+        "lessons": []
+      },
+      {
+        "day": "Ср",
+        "date": "26.08",
+        "lessons": []
+      },
+      {
+        "day": "Чт",
+        "date": "27.08",
+        "lessons": []
+      },
+      {
+        "day": "Пт",
+        "date": "28.08",
+        "lessons": []
+      },
+      {
+        "day": "Сб",
+        "date": "29.08",
+        "lessons": []
+      },
+      {
+        "day": "Нд",
+        "date": "30.08",
+        "lessons": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "sched": {
+    "14": {
+      "date": "31.08",
+      "dow": "Пн",
+      "week_num": 1,
+      "weeks_shift": 1
+    },
+    "15": {
+      "date": "01.09",
+      "dow": "Вт",
+      "week_num": 1,
+      "weeks_shift": 1
+    },
+    "16": {
+      "date": "02.09",
+      "dow": "Ср",
+      "week_num": 1,
+      "weeks_shift": 1
+    },
+    "17": {
+      "date": "03.09",
+      "dow": "Чт",
+      "week_num": 1,
+      "weeks_shift": 1
+    },
+    "18": {
+      "date": "04.09",
+      "dow": "Пт",
+      "week_num": 1,
+      "weeks_shift": 1
+    },
+    "19": {
+      "date": "05.09",
+      "dow": "Сб",
+      "week_num": 1,
+      "weeks_shift": 1
+    },
+    "20": {
+      "date": "06.09",
+      "dow": "Нд",
+      "week_num": 1,
+      "weeks_shift": 1
+    },
+    "21": {
+      "date": "07.09",
+      "dow": "Пн",
+      "week_num": 2,
+      "weeks_shift": 2
+    },
+    "22": {
+      "date": "08.09",
+      "dow": "Вт",
+      "week_num": 2,
+      "weeks_shift": 2
+    },
+    "23": {
+      "date": "09.09",
+      "dow": "Ср",
+      "week_num": 2,
+      "weeks_shift": 2
+    },
+    "24": {
+      "date": "10.09",
+      "dow": "Чт",
+      "week_num": 2,
+      "weeks_shift": 2
+    },
+    "25": {
+      "date": "11.09",
+      "dow": "Пт",
+      "week_num": 2,
+      "weeks_shift": 2
+    },
+    "26": {
+      "date": "12.09",
+      "dow": "Сб",
+      "week_num": 2,
+      "weeks_shift": 2
+    },
+    "27": {
+      "date": "13.09",
+      "dow": "Нд",
+      "week_num": 2,
+      "weeks_shift": 2
+    }
+  }
+}
