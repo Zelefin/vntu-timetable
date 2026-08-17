@@ -9,6 +9,7 @@ Checks:
 - `gofmt -w .`
 - `go vet ./...`
 - `go test ./...`
+- `go test -race ./...`
 
 Build:
 
