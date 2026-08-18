@@ -301,7 +301,6 @@ Accepted tradeoff: users partway through registration, and an administrator part
 - Key as primary key.
 - Value.
 - Updated timestamp.
-- Telegram administrator ID responsible for a manual change, when applicable.
 
 Store the university week offset here.
 

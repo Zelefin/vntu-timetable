@@ -17,6 +17,7 @@ type migration struct {
 
 var availableMigrations = []migration{
 	{version: 1, path: "migrations/001_initial.sql"},
+	{version: 2, path: "migrations/002_settings.sql"},
 }
 
 func migrateDatabase(ctx context.Context, db *sql.DB) error {

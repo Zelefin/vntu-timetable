@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestMigrateDatabaseAppliesInitialMigration(t *testing.T) {
+func TestMigrateDatabaseAppliesMigrations(t *testing.T) {
 	ctx := t.Context()
 	databasePath := filepath.Join(t.TempDir(), "test.db")
 
@@ -30,17 +30,18 @@ func TestMigrateDatabaseAppliesInitialMigration(t *testing.T) {
 		"groups",
 		"lessons",
 		"users",
+		"settings",
 	}
 
 	for _, table := range expectedTables {
 		var exists bool
 		err := db.QueryRowContext(ctx, `
-		SELECT EXISTS (
-			SELECT 1
-			FROM sqlite_schema
-			WHERE type = 'table' AND name = ?
-		)
-	`, table).Scan(&exists)
+			SELECT EXISTS (
+				SELECT 1
+				FROM sqlite_schema
+				WHERE type = 'table' AND name = ?
+			)
+		`, table).Scan(&exists)
 		if err != nil {
 			t.Fatalf("check table %q: %v", table, err)
 		}
@@ -50,24 +51,40 @@ func TestMigrateDatabaseAppliesInitialMigration(t *testing.T) {
 		}
 	}
 
-	var versionRecorded bool
-	err = db.QueryRowContext(ctx, `
-	SELECT EXISTS (
-		SELECT 1
-		FROM schema_migrations
-		WHERE version = 1
-	)
-`).Scan(&versionRecorded)
-	if err != nil {
-		t.Fatalf("check migration version: %v", err)
+	for _, expectedMigration := range availableMigrations {
+		var versionRecorded bool
+		err = db.QueryRowContext(ctx, `
+			SELECT EXISTS (
+				SELECT 1
+				FROM schema_migrations
+				WHERE version = ?
+			)
+		`, expectedMigration.version).Scan(&versionRecorded)
+		if err != nil {
+			t.Fatalf("check migration version %d: %v", expectedMigration.version, err)
+		}
+
+		if !versionRecorded {
+			t.Errorf("migration version %d was not recorded", expectedMigration.version)
+		}
 	}
 
-	if !versionRecorded {
-		t.Error("migration version 1 was not recorded")
+	var weekOffset string
+	err = db.QueryRowContext(ctx, `
+		SELECT value
+		FROM settings
+		WHERE key = 'week_offset'
+	`).Scan(&weekOffset)
+	if err != nil {
+		t.Fatalf("read week_offset: %v", err)
+	}
+
+	if weekOffset != "0" {
+		t.Errorf("week_offset = %q, expected %q", weekOffset, "0")
 	}
 }
 
-func TestMigrateDatabaseSkipsAppliedMigration(t *testing.T) {
+func TestMigrateDatabaseSkipsAppliedMigrations(t *testing.T) {
 	ctx := t.Context()
 	databasePath := filepath.Join(t.TempDir(), "test.db")
 
@@ -92,16 +109,19 @@ func TestMigrateDatabaseSkipsAppliedMigration(t *testing.T) {
 
 	var appliedCount int
 	err = db.QueryRowContext(ctx, `
-  		SELECT COUNT(*)
-  		FROM schema_migrations
-  		WHERE version = 1
-  	`).Scan(&appliedCount)
+		SELECT COUNT(*)
+		FROM schema_migrations
+	`).Scan(&appliedCount)
 	if err != nil {
 		t.Fatalf("count migration records: %v", err)
 	}
 
-	if appliedCount != 1 {
-		t.Errorf("migration version 1 record count = %d, expected 1", appliedCount)
+	if appliedCount != len(availableMigrations) {
+		t.Errorf(
+			"migration record count = %d, expected %d",
+			appliedCount,
+			len(availableMigrations),
+		)
 	}
 }
 
@@ -123,10 +143,10 @@ func TestMigrateDatabaseRollsBackFailedMigration(t *testing.T) {
 	// Migration 1 creates faculties first and groups second.
 	// This existing table makes it fail after faculties has been created.
 	_, err = db.ExecContext(ctx, `
-  		CREATE TABLE groups (
-  			id INTEGER PRIMARY KEY
-  		) STRICT
-  	`)
+		CREATE TABLE groups (
+			id INTEGER PRIMARY KEY
+		) STRICT
+	`)
 	if err != nil {
 		t.Fatalf("create conflicting groups table: %v", err)
 	}
@@ -138,12 +158,12 @@ func TestMigrateDatabaseRollsBackFailedMigration(t *testing.T) {
 
 	var facultiesExist bool
 	err = db.QueryRowContext(ctx, `
-  		SELECT EXISTS (
-  			SELECT 1
-  			FROM sqlite_schema
-  			WHERE type = 'table' AND name = 'faculties'
-  		)
-  	`).Scan(&facultiesExist)
+		SELECT EXISTS (
+			SELECT 1
+			FROM sqlite_schema
+			WHERE type = 'table' AND name = 'faculties'
+		)
+	`).Scan(&facultiesExist)
 	if err != nil {
 		t.Fatalf("check faculties table: %v", err)
 	}
@@ -154,10 +174,10 @@ func TestMigrateDatabaseRollsBackFailedMigration(t *testing.T) {
 
 	var appliedCount int
 	err = db.QueryRowContext(ctx, `
-  		SELECT COUNT(*)
-  		FROM schema_migrations
-  		WHERE version = 1
-  	`).Scan(&appliedCount)
+		SELECT COUNT(*)
+		FROM schema_migrations
+		WHERE version = 1
+	`).Scan(&appliedCount)
 	if err != nil {
 		t.Fatalf("count migration records: %v", err)
 	}
