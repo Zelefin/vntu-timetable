@@ -265,7 +265,7 @@ Mark missing faculties/groups inactive instead of immediately deleting them. Thi
 - Local integer primary key.
 - Group ID foreign key.
 - Week number: 1 or 2.
-- Day number: 0 through 6.
+- Day number: Monday = 0 through Sunday = 6.
 - Lesson number.
 - Subgroup: 0, 1, or 2 unless JetIQ demonstrates more values.
 - Subject name.
@@ -381,8 +381,8 @@ The admin `/week` command should show:
 - today's date in Europe/Kyiv;
 - current ISO week;
 - calculated university week;
-- whether the current offset is the default or manually changed;
-- who last changed it and when.
+- whether the current offset is the default or flipped;
+- when the setting was last updated.
 
 Provide explicit buttons:
 
@@ -810,6 +810,8 @@ Decision: SQLite driver: github.com/ncruces/go-sqlite3, selected for its CGO-fre
 - Implement repository functions as explicit SQL without a generic repository abstraction.
 
 Gate: migrations and domain/database tests pass from a fresh temporary database.
+
+Decision: Embed Go’s timezone database with time/tzdata. Load Europe/Kyiv once for time-aware runtime commands and convert instants before deriving schedule dates, weekdays, or university weeks.
 
 ### Phase 2: JetIQ synchronization
 
